@@ -2,13 +2,13 @@ package com.omega.server.domain.company;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omega.server.domain.address.RegisterAddress;
+import com.omega.server.domain.address.AddressDTO;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
 
-public record RegisterCompany(
+public record CompanyDTO(
         Long id,
 
         @NotBlank(message= "El nombre de la compañia no puede estar vacio")
@@ -23,15 +23,15 @@ public record RegisterCompany(
         String telephone,
 
         @NotBlank(message = "El nombre del contacto no puede estar vacío")
-        String nameContact,
+        String contactName,
 
         @JsonProperty(defaultValue = "false")
         Boolean isDeleted,
 
-        RegisterAddress address
+        AddressDTO address
 
 ) {
-    public RegisterCompany {
+    public CompanyDTO {
         if (isDeleted == null) {
             isDeleted = false;
         }

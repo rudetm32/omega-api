@@ -1,6 +1,6 @@
 package com.omega.server.domain.address;
 
-public record ResponseAddress(
+public record ResponseAddressDTO(
         Long id,
         String street,
         String number,

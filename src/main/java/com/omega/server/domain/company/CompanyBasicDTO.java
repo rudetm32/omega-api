@@ -1,11 +1,9 @@
 package com.omega.server.domain.company;
 
-import com.omega.server.domain.user.Rol;
-
-public record IncludeCompanyInUserDTO(
+public record CompanyBasicDTO(
         Long id,
         String name,
         String email,
-        String nameContact
+        String contactName
 ) {
 }

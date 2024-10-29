@@ -1,8 +1,8 @@
 package com.omega.server.domain.user;
 
-import com.omega.server.domain.company.IncludeCompanyInUserDTO;
+import com.omega.server.domain.company.CompanyBasicDTO;
 
-public record ResponseUser(
+public record ResponseUserDTO(
         Long id,
         String firstName,
         String lastName,
@@ -10,7 +10,7 @@ public record ResponseUser(
         String telephone,
         String username,
         Rol rol,
-        IncludeCompanyInUserDTO responseCompanyUser
+        CompanyBasicDTO companyBasicDTO
 ) {
 
 }

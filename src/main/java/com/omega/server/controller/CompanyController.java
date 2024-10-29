@@ -1,19 +1,19 @@
 package com.omega.server.controller;
 
-import com.omega.server.domain.address.RegisterAddress;
 import com.omega.server.domain.company.*;
-import com.omega.server.domain.user.UserDTO;
 import com.omega.server.service.CompanyService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
-@RequestMapping("/company")
+@RequestMapping("/companies")
 public class CompanyController {
 
     private final CompanyService companyService;
@@ -21,60 +21,40 @@ public class CompanyController {
         this.companyService = companyService;
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<ResponseCompany> createCompany(@RequestBody @Valid RegisterCompany data, UriComponentsBuilder uri) {
-        Company newCompany = new Company(data);
-        Company newData = companyService.createCompany(newCompany);
 
-        var response = new ResponseCompany(
-                newData.getId(), newData.getName(), newData.getEmail(),
-                newData.getTelephone(), newData.getNameContact(),
-                new RegisterAddress(
-                        newData.getAddress().getId(), newData.getAddress().getStreet(), newData.getAddress().getNumber(),
-                        newData.getAddress().getCity(), newData.getAddress().getState(), newData.getAddress().getZipCode(),
-                        newData.getAddress().isDeleted()));
-
-        URI url = uri.path("/company/{id}").buildAndExpand(newData.getId()).toUri();
-        return ResponseEntity.created(url).body(response);
+    @PostMapping
+    public ResponseEntity<ResponseCompanyDTO> createCompany(
+            @RequestBody @Valid CompanyDTO companyDTO,
+            UriComponentsBuilder uriComponentBuilder) {
+        ResponseCompanyDTO response = companyService.createCompanyAndMap(companyDTO);
+        URI location = uriComponentBuilder.path("/company/{id}")
+                .buildAndExpand(response.id()).toUri();
+        return ResponseEntity.created(location).body(response);
     }
 
     @GetMapping
-    public ResponseEntity<List<ResponseCompanyBasic>> getCompanies() {
-        List<Company> companies = companyService.getAllCompanies();
-        List<ResponseCompanyBasic> responseCompanies = companies.stream()
-                .map(company -> new ResponseCompanyBasic(
-                        company.getId(), company.getName(), company.getEmail(),
-                        company.getTelephone(), company.getNameContact(),
-                        new AddressDTO(
-                                company.getAddress().getId(), company.getAddress().getStreet(),
-                                company.getAddress().getCity(), company.getAddress().getState(),
-                                company.getAddress().getZipCode()))
-                ).toList();
-        return ResponseEntity.ok(responseCompanies);
+    public ResponseEntity<Page<ListCompanyDTO>> listCompanies(@PageableDefault(size = 10, sort = "name") Pageable pageable) {
+        Page<Company> companies = companyService.listCompanySort(pageable);
+        Page<ListCompanyDTO> listCompanies = companies.map(ListCompanyDTO::new);
+        return ResponseEntity.ok(listCompanies);
     }
 
-    @GetMapping("/with-users")
-    public ResponseEntity<List<ResponseCompanyWithUsers>> getCompaniesWithUsers() {
-        List<Company> companies = companyService.getAllCompaniesWithUsers();
-        List<ResponseCompanyWithUsers> responseCompanies = companies.stream()
-                .map(company -> new ResponseCompanyWithUsers(
-                        company.getId(), company.getName(), company.getEmail(),
-                        company.getTelephone(), company.getNameContact(),
-                        company.getUsers().stream()
-                                .map(user -> new UserDTO(
-                                        user.getId(), user.getUsername(), user.getEmail()
-                                )).toList()
-                )).toList();
-        return ResponseEntity.ok(responseCompanies);
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseCompanyDTO> getCompanyById(@PathVariable Long id){
+        ResponseCompanyDTO response = companyService.findCompany(id);
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/names")
-    public ResponseEntity<List<ResponseCompaniesNameDTO>> getCompaniesName() {
-        List<Company> companies = companyService.getAllCompanies();
-        List<ResponseCompaniesNameDTO> responseCompanies = companies.stream()
-                .map(company -> new ResponseCompaniesNameDTO(
-                        company.getId(), company.getName())
-                ).toList();
-        return ResponseEntity.ok(responseCompanies);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletedCompany(@PathVariable Long id) {
+        companyService.deleteCompany(id);
+        return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{companyId}")
+    public ResponseEntity<Company> updateCompany(@PathVariable Long companyId, @RequestBody UpdateCompanyDTO updateCompanyDTO) {
+        var companyUpdate = companyService.updateCompany(companyId, updateCompanyDTO);
+        return ResponseEntity.ok(companyUpdate);
+    }
+
 }

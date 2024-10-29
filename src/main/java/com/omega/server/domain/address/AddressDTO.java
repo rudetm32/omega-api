@@ -2,7 +2,7 @@ package com.omega.server.domain.address;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record RegisterAddress(
+public record AddressDTO(
         Long id,
         String street,
         String number,
@@ -13,7 +13,7 @@ public record RegisterAddress(
         @JsonProperty(defaultValue = "false")
         Boolean isDeleted
 ) {
-    public RegisterAddress {
+    public AddressDTO {
         if (isDeleted == null) {
             isDeleted = false;
         }
