@@ -6,7 +6,7 @@ import com.omega.server.domain.vehicle.RegisterVehicleDTO;
 import com.omega.server.domain.vehicle.ResponseVehicleDTO;
 import com.omega.server.domain.vehicle.UpdateVehicleDTO;
 import com.omega.server.domain.vehicle.Vehicle;
-import com.omega.server.exception.CustomException;
+import com.omega.server.infra.exception.CustomException;
 import com.omega.server.repository.CompanyRepository;
 import com.omega.server.repository.VehicleRepository;
 import org.springframework.data.domain.Page;
@@ -36,7 +36,7 @@ public class VehicleService {
         // Crear un nuevo objeto Vehicle y asignar los datos del DTO
         Vehicle vehicle = new Vehicle();
         vehicle.setLicensePlate(registerVehicleDTO.licensePlate());
-        vehicle.setEconomicNumber(registerVehicleDTO.economicNumber());
+        vehicle.setEcoNum(registerVehicleDTO.ecoNum());
         vehicle.setModel(registerVehicleDTO.model());
         vehicle.setCompany(company); // Asigna la compañía encontrada al vehículo
 
@@ -47,7 +47,7 @@ public class VehicleService {
         return new ResponseVehicleDTO(
                 vehicle.getId(),
                 vehicle.getLicensePlate(),
-                vehicle.getEconomicNumber(),
+                vehicle.getEcoNum(),
                 vehicle.getModel(),
                 new ResponseCompaniesNameDTO(
                         vehicle.getCompany().getId(),
@@ -77,7 +77,7 @@ public class VehicleService {
             return new ResponseVehicleDTO(
                     vehicle.getId(),
                     vehicle.getLicensePlate(),
-                    vehicle.getEconomicNumber(),
+                    vehicle.getEcoNum(),
                     vehicle.getModel(),
                     new ResponseCompaniesNameDTO(vehicle.getCompany().getId(), vehicle.getCompany().getName())
             );

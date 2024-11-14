@@ -4,7 +4,6 @@ public record UpdateUserDTO(
         String firstName,
         String lastname,
         String email,
-        String telephone,
         Rol rol,
         Boolean isDeleted
 ) {

@@ -2,10 +2,9 @@ package com.omega.server.domain.location;
 
 import java.time.LocalDateTime;
 
-public record LocationDTO(double latitude, double longitude, LocalDateTime timestamp) {
-    // Este constructor es implícito en los records.
+public record LocationDTO(Long id, double latitude, double longitude, LocalDateTime timestamp) {
+    // Constructor adicional para mapear directamente desde la entidad `Location`
     public LocationDTO(Location location) {
-        this(location.getLatitude(), location.getLongitude(), location.getTimestamp());
+        this(location.getId(), location.getLatitude(), location.getLongitude(), location.getTimestamp());
     }
 }
-

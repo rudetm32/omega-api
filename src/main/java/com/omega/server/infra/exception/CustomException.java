@@ -1,4 +1,4 @@
-package com.omega.server.exception;
+package com.omega.server.infra.exception;
 
 public class CustomException extends RuntimeException {
     public CustomException(String message){

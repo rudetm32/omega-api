@@ -1,12 +1,11 @@
 package com.omega.server.service;
 
 import com.omega.server.domain.address.AddressDTO;
-import com.omega.server.domain.address.ResponseAddressDTO;
 import com.omega.server.domain.company.Company;
 import com.omega.server.domain.company.CompanyDTO;
 import com.omega.server.domain.company.ResponseCompanyDTO;
 import com.omega.server.domain.company.UpdateCompanyDTO;
-import com.omega.server.exception.CustomException;
+import com.omega.server.infra.exception.CustomException;
 import com.omega.server.repository.CompanyRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

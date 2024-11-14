@@ -22,6 +22,7 @@ public class UserController {
         this.userService = userService;
     }
 
+
     @PostMapping
     public ResponseEntity<ResponseUserDTO> createUser(@RequestBody @Valid UserDTO userDTO,
             UriComponentsBuilder uriComponentsBuilder) {
@@ -31,6 +32,7 @@ public class UserController {
         return ResponseEntity.created(location).body(response);
     }
 
+
     @GetMapping
     public ResponseEntity<Page<ListUserDTO>> listVehicles(@PageableDefault(size = 10, sort = "username") Pageable pageable) {
         Page<User> users = userService.listUserSort(pageable);
@@ -38,17 +40,20 @@ public class UserController {
         return ResponseEntity.ok(listUsers);
     }
 
+
     @GetMapping("/{id}")
     public ResponseEntity<ResponseUserDTO> getUserById (@PathVariable Long id) {
         ResponseUserDTO response = userService.findUser(id);
         return ResponseEntity.ok(response);
     }
 
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletedUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
+
 
     @PutMapping("/{userId}")
     public ResponseEntity<User> updateUser(@PathVariable Long userId, @RequestBody UpdateUserDTO updateUserDTO) {

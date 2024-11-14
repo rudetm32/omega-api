@@ -7,7 +7,6 @@ public record ListUserDTO(
         String firstName,
         String lastName,
         String email,
-        String telephone,
         String username,
         Rol rol,
         CompanyBasicDTO company
@@ -15,7 +14,7 @@ public record ListUserDTO(
 ) {
     public ListUserDTO(User user){
         this(user.getId(), user.getFirstName(), user.getLastName(),
-                user.getEmail(), user.getTelephone(), user.getUsername(),
+                user.getEmail(), user.getUsername(),
                 user.getRol(),
                 new CompanyBasicDTO(user.getCompany().getId(), user.getCompany().getName(),
                         user.getCompany().getEmail(), user.getCompany().getContactName()

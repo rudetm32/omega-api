@@ -1,4 +1,4 @@
-package com.omega.server.exception;
+package com.omega.server.infra.exception;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;

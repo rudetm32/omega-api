@@ -12,7 +12,7 @@ public record RegisterVehicleDTO(
         String model,
 
         @NotBlank(message = "Vehicle economic number must be provided")
-        String economicNumber,
+        String ecoNum,
 
         @NotNull(message = "Company ID must be provided")
         Long companyId,

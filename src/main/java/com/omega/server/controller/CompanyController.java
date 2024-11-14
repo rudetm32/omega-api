@@ -26,14 +26,19 @@ public class CompanyController {
     public ResponseEntity<ResponseCompanyDTO> createCompany(
             @RequestBody @Valid CompanyDTO companyDTO,
             UriComponentsBuilder uriComponentBuilder) {
+
         ResponseCompanyDTO response = companyService.createCompanyAndMap(companyDTO);
         URI location = uriComponentBuilder.path("/company/{id}")
                 .buildAndExpand(response.id()).toUri();
+
         return ResponseEntity.created(location).body(response);
     }
 
     @GetMapping
-    public ResponseEntity<Page<ListCompanyDTO>> listCompanies(@PageableDefault(size = 10, sort = "name") Pageable pageable) {
+    public ResponseEntity<Page<ListCompanyDTO>> listCompanies(
+            @PageableDefault(size = 10, sort = "name")
+            Pageable pageable) {
+
         Page<Company> companies = companyService.listCompanySort(pageable);
         Page<ListCompanyDTO> listCompanies = companies.map(ListCompanyDTO::new);
         return ResponseEntity.ok(listCompanies);

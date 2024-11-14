@@ -1,5 +1,6 @@
-package com.omega.server.exception;
+package com.omega.server.infra.exception;
 
+import com.omega.server.infra.exception.validation.DateValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -16,6 +17,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleCustomException(CustomException ex, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse("NOT_FOUND", ex.getMessage(), request.getDescription(false));
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    // Maneja las excepciones de validación de fechas
+    @ExceptionHandler(DateValidationException.class) // Agrega este manejador
+    public ResponseEntity<ErrorResponse> handleDateValidationException(DateValidationException ex, WebRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse("BAD_REQUEST", ex.getMessage(), request.getDescription(false));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     // Maneja las excepciones generales

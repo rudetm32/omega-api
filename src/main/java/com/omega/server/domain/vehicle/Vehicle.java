@@ -1,14 +1,12 @@
 package com.omega.server.domain.vehicle;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.omega.server.domain.location.Location;
 import com.omega.server.domain.company.Company;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "vehicles")
@@ -27,7 +25,7 @@ public class Vehicle {
     private String licensePlate;
 
     @Column(name = "economic_number")
-    private String economicNumber;
+    private String ecoNum;
 
     private String model;  // Modelo del vehículo
 
@@ -39,39 +37,24 @@ public class Vehicle {
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
 
-
     @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Location> locations;
 
-    // Constructor con los valores asignados correctamente
 
+//    public Vehicle() {
+//
+//    }
 
-    public Vehicle(Long id, String licensePlate, String model, String economicNumber, Boolean isDeleted) {
+    // Constructor
+    public Vehicle(Long id, String licensePlate, String model, String ecoNum, Boolean isDeleted) {
         this.id = id;
         this.licensePlate = licensePlate;
         this.model = model;
-        this.economicNumber = economicNumber;
+        this.ecoNum = ecoNum;
         this.isDeleted = isDeleted;
     }
 
-
-
-    // Método para actualizar atributos del vehículo
-    public void updateVehicleAttributes(UpdateVehicleDTO vehicleUpdateData) {
-        if (vehicleUpdateData.isDeleted() != null) {
-            this.isDeleted = vehicleUpdateData.isDeleted();
-        }
-        if (vehicleUpdateData.licensePlate() != null) {
-            this.licensePlate = vehicleUpdateData.licensePlate();
-        }
-        if (vehicleUpdateData.economicNumber() != null) {
-            this.economicNumber = vehicleUpdateData.economicNumber();
-        }
-        if (vehicleUpdateData.model() != null) {
-            this.model = vehicleUpdateData.model();
-        }
-    }
-
+    //Getter and Setter
     public Long getId() {
         return id;
     }
@@ -88,12 +71,12 @@ public class Vehicle {
         this.licensePlate = licensePlate;
     }
 
-    public String getEconomicNumber() {
-        return economicNumber;
+    public String getEcoNum() {
+        return ecoNum;
     }
 
-    public void setEconomicNumber(String economicNumber) {
-        this.economicNumber = economicNumber;
+    public void setEcoNum(String ecoNum) {
+        this.ecoNum = ecoNum;
     }
 
     public String getModel() {
@@ -126,5 +109,24 @@ public class Vehicle {
 
     public void setLocations(List<Location> locations) {
         this.locations = locations;
+    }
+
+
+
+
+    // Método para actualizar atributos del vehículo
+    public void updateVehicleAttributes(UpdateVehicleDTO vehicleUpdateData) {
+        if (vehicleUpdateData.isDeleted() != null) {
+            this.isDeleted = vehicleUpdateData.isDeleted();
+        }
+        if (vehicleUpdateData.licensePlate() != null) {
+            this.licensePlate = vehicleUpdateData.licensePlate();
+        }
+        if (vehicleUpdateData.ecoNum() != null) {
+            this.ecoNum = vehicleUpdateData.ecoNum();
+        }
+        if (vehicleUpdateData.model() != null) {
+            this.model = vehicleUpdateData.model();
+        }
     }
 }

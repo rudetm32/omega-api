@@ -5,7 +5,7 @@ import com.omega.server.domain.company.CompanyBasicDTO;
 import com.omega.server.domain.user.UserDTO;
 import com.omega.server.domain.user.ResponseUserDTO;
 import com.omega.server.domain.user.UpdateUserDTO;
-import com.omega.server.exception.CustomException;
+import com.omega.server.infra.exception.CustomException;
 import com.omega.server.repository.CompanyRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,17 +39,16 @@ public class UserService {
         String encodedPassword = passwordEncoder.encode(newUser.getPassword());
         newUser.setPassword(encodedPassword);
 
-        Optional<User> existsUser = userRepository.findByUsernameAndIsDeletedFalse(newUser.getUsername());
-        if (existsUser.isPresent()) {
-            throw new CustomException("A user with that username already exists.");
-        }
+//        Optional<User> existsUser = userRepository.findByUsernameAndIsDeletedFalse(newUser.getUsername());
+//        if (existsUser.isPresent()) {
+//            throw new CustomException("A user with that username already exists.");
+//        }
         newUser.setCompany(company);
         newUser = userRepository.save(newUser);
 
         return new ResponseUserDTO(
                 newUser.getId(), newUser.getFirstName(), newUser.getLastName(),
-                newUser.getEmail(), newUser.getTelephone(), newUser.getUsername(),
-                newUser.getRol(),
+                newUser.getEmail(),  newUser.getUsername(), newUser.getRol(),
                 new CompanyBasicDTO(
                         newUser.getCompany().getId(), newUser.getCompany().getName(),
                         newUser.getCompany().getEmail(), newUser.getCompany().getContactName()
@@ -75,8 +74,7 @@ public class UserService {
         } else {
             return new ResponseUserDTO(
                     user.getId(), user.getFirstName(), user.getLastName(),
-                    user.getEmail(), user.getTelephone(), user.getUsername(),
-                    user.getRol(),
+                    user.getEmail(), user.getUsername(), user.getRol(),
                     new CompanyBasicDTO(
                             user.getCompany().getId(), user.getCompany().getContactName(),
                             user.getCompany().getContactName(),user.getCompany().getEmail())

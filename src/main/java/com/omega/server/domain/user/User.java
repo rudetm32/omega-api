@@ -3,6 +3,12 @@ package com.omega.server.domain.user;
 import com.omega.server.domain.company.Company;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity(name = "User")
 @Table(name="users")
@@ -10,7 +16,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of="id")
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,8 +30,6 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
-    private String telephone;
-
     @Enumerated(EnumType.STRING)
     private Rol rol;
 
@@ -34,18 +38,18 @@ public class User {
 
     private String password;
 
+    @Column(name = "is_deleted", columnDefinition = "BOOLEAN DEFAULT false")
+    private Boolean isDeleted = false;
+
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @Column(name = "is_deleted", columnDefinition = "BOOLEAN DEFAULT false")
-    private Boolean isDeleted = false;
 
     public User(UserDTO datos) {
         this.firstName = datos.firstName();
         this.lastName = datos.lastName();
         this.email = datos.email();
-        this.telephone = datos.telephone();
         this.rol = datos.rol();
         this.isDeleted = datos.isDeleted();
         this.username = datos.username();
@@ -63,9 +67,7 @@ public class User {
         if (updateUserDTO.email() != null) {
             this.email = updateUserDTO.email();
         }
-        if (updateUserDTO.telephone() != null) {
-            this.telephone = updateUserDTO.telephone();
-        }
+
         if (updateUserDTO.rol() != null) {
             this.rol = updateUserDTO.rol();
         }
@@ -74,6 +76,7 @@ public class User {
         }
     }
 
+    //Getters and Setters
     public Long getId() {
         return id;
     }
@@ -106,14 +109,6 @@ public class User {
         this.email = email;
     }
 
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
     public Rol getRol() {
         return rol;
     }
@@ -122,17 +117,17 @@ public class User {
         this.rol = rol;
     }
 
-    public String getUsername() {
-        return username;
-    }
+//    public String getUsername() {
+//        return username;
+//    }
 
     public void setUsername(String username) {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
+//    public String getPassword() {
+//        return password;
+//    }
 
     public void setPassword(String password) {
         this.password = password;
@@ -153,5 +148,41 @@ public class User {
     public void setDeleted(Boolean deleted) {
         isDeleted = deleted;
     }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
 }
 

@@ -7,7 +7,6 @@ public record ResponseUserDTO(
         String firstName,
         String lastName,
         String email,
-        String telephone,
         String username,
         Rol rol,
         CompanyBasicDTO companyBasicDTO

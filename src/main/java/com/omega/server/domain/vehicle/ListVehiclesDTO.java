@@ -5,7 +5,7 @@ import com.omega.server.domain.company.ResponseCompaniesNameDTO;
 public record ListVehiclesDTO(
         Long id,
         String plates,
-        String economicNumber,
+        String ecoNum,
         String model,
         ResponseCompaniesNameDTO company // Ya contiene id y name de la compañía
 ) {
@@ -14,7 +14,7 @@ public record ListVehiclesDTO(
         this(
                 vehicle.getId(),
                 vehicle.getLicensePlate(),
-                vehicle.getEconomicNumber(),
+                vehicle.getEcoNum(),
                 vehicle.getModel(),
                 new ResponseCompaniesNameDTO(vehicle.getCompany().getId(), vehicle.getCompany().getName())
         );

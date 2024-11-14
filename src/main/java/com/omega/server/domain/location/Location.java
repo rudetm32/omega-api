@@ -4,7 +4,8 @@ import com.omega.server.domain.vehicle.Vehicle;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
+@Entity(name = "Location")
+@Table(name="locations")
 public class Location {
 
     @Id
